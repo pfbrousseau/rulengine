@@ -11,13 +11,13 @@ Gem::Specification.new do |spec|
 
   spec.summary       = %q{A Rule Engine that can apply rules tell when rules will conflict.}
   spec.description   = %q{Not only can this rule engine tell when rules conflict but it can be expanded in many ways, including as an automatic theorem solver}
-  spec.homepage      = "http://rulengine.francoys.com"
+  spec.homepage      = "https://github.com/pfbrousseau/rulengine" # "http://rulengine.francoys.com"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
   # to allow pushing to a single host or delete this section to allow pushing to any host.
   if spec.respond_to?(:metadata)
-    spec.metadata["allowed_push_host"] = "TODO: Set to 'http://mygemserver.com'"
+    spec.metadata["allowed_push_host"] = "https://rubygems.org"
   else
     raise "RubyGems 2.0 or newer is required to protect against " \
       "public gem pushes."

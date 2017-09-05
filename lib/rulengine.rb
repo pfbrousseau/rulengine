@@ -1,16 +1,16 @@
 require "active_record"
 
 require "rulengine/version"
+
+# Move?
 require "rulengine/rule"
+require "rulengine/state"
 
 module Rulengine
-  
-
-
 	class Engine 
 
     # TODO
-    def build_db
+    def self.build_db
       ActiveRecord::Schema.define do
         unless ActiveRecord::Base.connection.tables.include? 'rules'
           create_table :rules do |t|

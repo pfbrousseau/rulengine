@@ -1,10 +1,22 @@
+require "active_record"
+
+ActiveRecord::Base.establish_connection(
+  adapter:  'postgresql', # or 'postgresql' or 'sqlite3'
+  database: 'pfb',
+  username: 'pfb',
+  password: '',
+  host:     'localhost'
+)
+
+# ActiveRecord::Base.connection
+
 module Rulengine
   class State < ActiveRecord::Base
     BadInput = Class.new StandardError
 
     def apply_rule(rule)
-      raise BadInput unless rule.is_a? Rule
-      self.data = Rule.first.apply_to(data.to_set)
+      raise BadInput unless rule.is_a? Rulengine::Rule
+      self.data = Rulengine::Rule.first.apply_to(data.to_set)
     end
 
     def to_set

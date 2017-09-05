@@ -1,43 +1,34 @@
 require "active_record"
 require "set"
 
+
+ActiveRecord::Base.establish_connection(
+  adapter:  'postgresql', # or 'postgresql' or 'sqlite3'
+  database: 'pfb',
+  username: 'pfb',
+  password: '',
+  host:     'localhost'
+)
+
+ActiveRecord::Base.connection
+
+
 module Rulengine
-class Rule < ActiveRecord::Base
-    def self.authenticate_unsafely(user_name, password)
-      where("user_name = '#{user_name}' AND password = '#{password}'").first
+  class Rule < ActiveRecord::Base
+    InvalidRuleSet = Class.new StandardError
+
+    def self.list_all_combinations
+      # Shortcut, can be greatly optimized
+      left = Rulengine::Rule.all.pluck(:given, :unless_given).flatten.to_set
+      right = Rulengine::Rule.all.pluck(:action).map(&:values).flatten.to_set
+      vars = left + right - [nil]
+      # For optimization, remove to_a (less readable)
+      (1..vars.count).flat_map{ |size| vars.to_a.combination(size).to_a }
+
     end
 
-    def self.authenticate_safely(user_name, password)
-      where("user_name = ? AND password = ?", user_name, password).first
-    end
-
-    def self.authenticate_safely_simply(user_name, password)
-      where(user_name: user_name, password: password).first
-    end
   end
-
 end
-# class Rule #< ActiveRecord::Base
-#   # def self.authenticate_unsafely(user_name, password)
-#   #   where("user_name = '#{user_name}' AND password = '#{password}'").first
-#   # end
-
-#   # def self.authenticate_safely(user_name, password)
-#   #   where("user_name = ? AND password = ?", user_name, password).first
-#   # end
-
-#   # def self.authenticate_safely_simply(user_name, password)
-#   #   where(user_name: user_name, password: password).first
-#   # end
-# end
-
-# ActiveRecord::Base.establish_connection(
-#   adapter:  'mysql2', # or 'postgresql' or 'sqlite3'
-#   database: 'DB_NAME',
-#   username: 'DB_USER',
-#   password: 'DB_PASS',
-#   host:     'localhost'
-# )
 
 
 # class Rule < ApplicationRecord

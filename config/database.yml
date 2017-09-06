@@ -1,0 +1,24 @@
+default: &default
+  adapter: postgresql
+  # adapter: sqlite3
+  pool: 10
+  timeout: 60
+  # adapter:  'postgresql', # or 'postgresql' or 'sqlite3'
+  database: 'pfb'
+  username: 'pfb'
+  password: ''
+  host: 'localhost'
+
+development:
+  <<: *default
+
+# Warning: The database defined as "test" will be erased and
+# re-generated from your development database when you run "rake".
+# Do not set this db to the same as development or production.
+test:
+  <<: *default
+  database: truling_test
+
+# production:
+#   <<: *default
+# #  database: db/production.sqlite3

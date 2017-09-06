@@ -1,15 +1,6 @@
 require "active_record"
 require "set"
 
-
-ActiveRecord::Base.establish_connection(
-  adapter:  'postgresql', # or 'postgresql' or 'sqlite3'
-  database: 'pfb',
-  username: 'pfb',
-  password: '',
-  host:     'localhost'
-)
-
 ActiveRecord::Base.connection
 
 
@@ -69,11 +60,11 @@ module Rulengine
       data = data.to_set unless data.is_a? Set
       if applies?(data)
 
-        # Refactor action into classes with `perform`
+        # Refactor action into classes with `perform` and use a hash to make O(1) !
         action.each do |k, v|
-          if k.eql? 'add'
+          if (k.eql? 'add') || (k.eql? 'requires')
             data += (v || [])
-          elsif k.eql? 'remove'
+          elsif (k.eql? 'remove') || (k.eql? 'excludes')
             data -= (v || [])
           else
             puts k, v

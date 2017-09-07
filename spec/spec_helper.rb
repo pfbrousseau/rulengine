@@ -11,4 +11,21 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
+
+  ActiveRecord::Base.establish_connection(
+      adapter: 'postgresql',
+      database: 'rulengine_test'
+  )
 end
+
+ENV['ENV'] = 'test' # Ensure we don't drop the development database
+# Dotenv.load('.env.test')
+require 'bundler/gem_tasks'
+require_relative '../support/active_record_rake_tasks'
+Rake::Task['db:drop'].invoke
+Rake::Task['db:create'].invoke
+
+# move to task?
+require "rulengine/setup_db"
+
+# Rake::Task['db:structure:load'].invoke

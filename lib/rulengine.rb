@@ -7,29 +7,10 @@ require "rulengine/state"
 require "rulengine/parser"
 
 
-# require 'pry'
-
-
-# TODO
-require "active_record"
-require 'yaml'
-config   = YAML::load(IO.read("config/database.yml"))['development']
-
-host     = config["host"]
-database = config["database"]
-username = config["username"]
-password = config["password"]
-
-ActiveRecord::Base.establish_connection(
-  adapter:  'postgresql', # or 'postgresql' or 'sqlite3'
-  database: database,
-  username: username,
-  password: password,
-  host:     host
-)
+require 'pry'
 
 module Rulengine
-	class Engine 
+  class Engine
 
     # TODO
     def self.build_db
@@ -53,9 +34,8 @@ module Rulengine
       end
     end
 
-		def initialize
-			puts "init rulengine"
-      
+    def initialize
+      puts "init rulengine"
       # binding.pry
 
       # config   = YAML::load(IO.read("config/database.yml"))['development']
@@ -74,17 +54,17 @@ module Rulengine
       # )
 
       Rulengine::Engine.build_db
-      Rulengine::Rule.connection
+      # Rulengine::Rule.connection
 
 
-		end
+    end
 
-		def self.a
-			puts 'a'
-			'a'
-		end
-		
-	end
+    def self.a
+      puts 'a'
+      'a'
+    end
+
+  end
 end
 
-Rulengine::Engine.new
+# Rulengine::Engine.new

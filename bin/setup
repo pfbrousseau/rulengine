@@ -6,3 +6,11 @@ set -vx
 bundle install
 
 # Do any other automated setup that you need to do here
+
+psql postgres -tAc "SELECT 1 FROM pg_roles WHERE rolname='rulengine'" | grep -q 1 || \
+psql postgres --command="create role rulengine with superuser login password ''"
+
+psql postgres -tAc "SELECT 1 FROM pg_database WHERE datname='rulengine_development'" | grep -q 1 || \
+rake db:create
+
+ruby "lib/rulengine/setup_db.rb"

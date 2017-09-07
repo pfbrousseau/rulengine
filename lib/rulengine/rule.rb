@@ -1,7 +1,7 @@
 require "active_record"
 require "set"
 
-ActiveRecord::Base.connection
+# ActiveRecord::Base.connection
 
 
 module Rulengine
@@ -19,7 +19,7 @@ module Rulengine
     end
 
   
-    def self.find_conflicts # Don't pass data, generate it!
+    def self.find_conflicts() # Don't pass data, generate it!
       list_all_combinations.each do |data|
         puts "Testing combination: #{data}"
         data = apply_all_rules(data)
@@ -66,6 +66,8 @@ module Rulengine
             data += (v || [])
           elsif (k.eql? 'remove') || (k.eql? 'excludes')
             data -= (v || [])
+          elsif k.eql? 'choice'
+            data += [{"choice" => v}]
           else
             puts k, v
             raise NotImplementedError

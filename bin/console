@@ -10,5 +10,39 @@ require "rulengine"
 # require "pry"
 # Pry.start
 
-require "irb"
-IRB.start(__FILE__)
+require 'active_record'
+require 'logger'
+require 'pry'
+
+ActiveRecord::Base.establish_connection(
+    :adapter => 'postgresql',
+    :database => 'rulengine_development'
+)
+ActiveRecord::Base.logger = Logger.new(STDOUT)
+
+require 'dotenv'
+
+# File.exist?('.env.local') ?
+#     Dotenv.load('.env.local') :
+#     raise(StandardError.new('You must setup your .env.local file before using the console'))
+
+# def data_load_requested?
+#   ARGV.include?("load_data")
+# end
+#
+# def schema_exists?
+#   # Check to see if the user has imported Vipr data yet. If they haven't, we need to load it!
+#   query = "SELECT schema_name FROM information_schema.schemata WHERE schema_name = 'vipr';"
+#   ActiveRecord::Base.connection.select_values(query).present?
+# end
+#
+# if data_load_requested? || !schema_exists?
+#   Vipr::DataImporter.new(logger: Logger.new(STDOUT), root_path: Pathname.new(Dir.pwd)).import_vipr_data
+# end
+
+ActiveRecord::Base.connection
+
+Pry.start
+
+# require "irb"
+# IRB.start(__FILE__)

@@ -4,7 +4,7 @@ module Rulengine
   class Parser < Object
     ACTIONS = ['requires', 'excludes'].freeze
 
-    def self.text_to_rules(data)
+    def self.text_to_rules(data, save=false)
       rules = []
 
       re = Regexp.new "(.*)(#{ACTIONS.join('|')})(.*)"
@@ -19,14 +19,19 @@ module Rulengine
         # (Rule.new given: ['a', 'c'], unless_given: ['b'], action: {remove: ['c']} ).save!
 
         a, b = right.split(' or ')
-        built_action = Hash[action, a]
+        built_action = Hash[action, [a]]
         rules << Rulengine::Rule.new(given:(left+[a]), unless_given:[b], action:built_action)
 
         rules << Rulengine::Rule.new(given:(left+[b]), unless_given:[a], action:built_action)
+
+        rules << Rulengine::Rule.new(given:(left), unless_given:[a, b], action:{"choice" => [a, b]})
       else
         rules << self.rule_from_parts(left, action, right)
       end
-      
+
+      if save
+        rules.map(&:save!)
+      end
       rules
 
     end
